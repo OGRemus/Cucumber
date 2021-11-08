@@ -1,5 +1,5 @@
 import {Given, When, And, Then} from 'cypress-cucumber-preprocessor/steps'
-
+var numberOfQuestions
 When('I click on create new Project button', () => {
     cy.get('.project-card.new-project').click()
 })
@@ -17,6 +17,10 @@ And('I click on the first stage', () => {
 
 And('I fill in question information', () => {
     cy.get('.p-button.p-component.rnd-btn.primary-btn').contains('New Question').click()
+    cy.get('.question-container').its('length').then(length => {
+        numberOfQuestions = length
+    })
+    cy.get('.p-button.p-component.rnd-btn.primary-btn').contains('New Question').click()
     cy.wait(1000)
     cy.get('.question-container').should('be.visible')
     cy.get('textarea.p-inputtextarea.p-inputtext.p-component.p-filled.p-inputtextarea-resizable').parent().contains('Question').clear().type('This is a test question')
@@ -31,6 +35,8 @@ And('I click on update question button', () => {
 })
 
 Then('The question is created', () => {
+ 
+    cy.get('.question-container').its('length').should('eq', numberOfQuestions + 1)
     cy.get('button.p-button.p-button-danger').click()
     cy.get('.confirm-delete span.p-button-label').click()
 })

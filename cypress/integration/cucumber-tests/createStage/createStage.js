@@ -9,10 +9,17 @@ When('I choose {string} project', project =>{
 })
 
 And('I click the new stage button', () => {
-    // cy.get('.stage').its('length').then(length =>{
-    //     numberOfStages = length
-    // })
-    
+    cy.get('.stage-selector').then(element => {
+        if(element.children('.stage').length === 0)
+            numberOfStages = 0
+        else
+        {
+            cy.get('.stage').its('length').then(length =>{
+                numberOfStages = length
+            })
+        }
+       
+    })
     cy.get("span.p-button-label").contains('New Stage').click()
 })
 
@@ -23,5 +30,5 @@ And('I fill in stage details', () => {
 })        
 
 Then('The stage is created', () =>{
-    // cy.get('.stage').its('length').should('eq',numberOfStages+1)
+    cy.get('.stage').its('length').should('eq',numberOfStages+1)
 })
